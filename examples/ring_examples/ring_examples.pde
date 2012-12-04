@@ -17,6 +17,7 @@ void setup(){
   ring1 = new Ring(); // initialize ring;
   
   /* Each ring has a default set of parameters which you can set individually with the following methods*/
+  ring1.setAutoMirror(true); //enables auto mirroring, so that the ring is draw a second time mirrored
   ring1.setNumber(10); //sets the number of objects in the ring
   ring1.setWidth(100); //sets the width of each object in the ring
   ring1.setHeight(150); //sets the height of the curves of the ring
@@ -31,15 +32,18 @@ void setup(){
    */
    
   ring2 = ring1.mirror(); //returns a mirrored version of a ring
-  
-  
+  ring2.setAutoMirror(true);
+  ring2.setNumber(5);
+  ring2.setCenterOffset(40);
+  ring2.setWidth(90);
+  ring2.setHeight(200);
+  ring2.setStrokeWeight(8);
 }
 
 void draw(){
-
  ring1.draw(this); //draws the ring
+ stroke(0);
  ring2.draw(this); 
-
 }
 
 

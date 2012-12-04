@@ -1,5 +1,5 @@
 <component name="ArtifactManager">
-  <artifact build-on-make="true" name="mandala:jar">
+  <artifact name="mandala:jar">
     <output-path>$PROJECT_DIR$/library</output-path>
     <root id="root">
       <element id="archive" name="mandala.jar">

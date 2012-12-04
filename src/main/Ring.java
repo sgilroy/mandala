@@ -69,13 +69,22 @@ public class Ring {
 		
 	}
 	
-	
+	/**
+	 * Sets the position of the start point of the curve. Changing the position of the start point will not affect the
+	 * end point.
+	 * @param x the x coordinate of the start point
+	 * @param y the y coordinate of the start point
+	 */
 	public void setStartPoint(float x, float y){
 		this.startX=x;
 		this.startY=y;
-		
 	}
-	
+
+	/**
+	 * Sets the position of the end point of the curve.
+	 * @param x the x coordinate of the end point
+	 * @param y the y coordinate of the end point
+	 */
 	public void setEndPoint(float x, float y){
 		this.endX = x;
 		this.endY = y;
@@ -180,6 +189,12 @@ public class Ring {
 		return endX - startX;
 	}
 
+	/**
+	 * Returns true if the autoMirror flag is set, indicating that the Ring should automatically draw a mirror of
+	 * itself when draw is called.
+	 * @return true if the autoMirror flag is set, indicating that the Ring should automatically draw a mirror of
+	 * itself when draw is called.
+	 */
 	public boolean isAutoMirror()
 	{
 		return autoMirror;
