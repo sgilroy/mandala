@@ -5,11 +5,12 @@ import processing.core.PApplet;
 public class Ring {
 	private int num;
 	private float height;
-	private float width;
 	private float offset;
 	private float cDist;
 	private float startX;
 	private float startY;
+	private float endX;
+	private float endY;
 	float startZ = 0;
 	private Point3d c1;
 	private Point3d c2;
@@ -17,18 +18,19 @@ public class Ring {
 	private boolean flip2;
 	private float strokeWeight;
 	BezierCurve bez;
-	
+	private boolean autoMirror = false;
+
 	public Ring(){
 	
 		startX =0;
 		startY= 0;
-		width=100;
-		height=100;
+		setWidth(100);
+		height = 100;
 		offset=0;
 		num=5;
 		cDist=0;
-		c1 = new Point3d(startX+(width*0.25f),startY- (height*0.5f),0.0f);
-		c2 = new Point3d(startX+(width*0.25f),startY+ (height*0.5f),0.0f);
+		c1 = new Point3d(startX+(getWidth() *0.25f),startY- (getHeight() *0.5f),0.0f);
+		c2 = new Point3d(startX+(getWidth() *0.25f),startY+ (getHeight() *0.5f),0.0f);
 		flip1=false;
 		flip2=false;
 		this.strokeWeight = 5.0f;
@@ -37,12 +39,14 @@ public class Ring {
 	public void setNumber(int num){
 		this.num=num;
 	}
-	
+
 	public void setWidth(float width){
-		this.width = width;
+		endX = startX + width;
+		endY = startY;
 	}
-	
+
 	public void setHeight(float height){
+		this.height = height;
 		c1.y = startY- (height*0.5f);
 		c2.y = startY+ (height*0.5f);
 		if(this.flip1){
@@ -73,9 +77,8 @@ public class Ring {
 	}
 	
 	public void setEndPoint(float x, float y){
-		this.width = Math.abs(startX-x);
-		this.height = Math.abs(startY-y);
-		 
+		this.endX = x;
+		this.endY = y;
 	}
 	
 	public void setStartCurvePoint(float x, float y){
@@ -112,8 +115,7 @@ public class Ring {
 	
 	public void set(int num, float width, float height, float centerOffset, float rotationOffset, float strokeWeight, boolean flip1, boolean flip2){
 			this.num = num;
-			this.width = width;
-			this.height = height;
+			this.setWidth(width);
 			this.setHeight(height);
 			this.cDist = centerOffset;
 			this.offset = rotationOffset;
@@ -128,23 +130,17 @@ public class Ring {
 				flip(c2);
 				
 			}
-			
-		  
-	}  
+	}
 	
 	public void generate (){
-		bez = new BezierCurve(startX, startY, startZ,c1,c2, startX+width,startY, startZ);
-		
-		  
-	}  
-		
-		  
-	
+		bez = new BezierCurve(startX, startY, startZ, c1, c2, endX, endY, startZ);
+	}
+
 	public void draw(PApplet parent){
 		this.generate();
 		  parent.noFill();
 		  parent.strokeWeight(this.strokeWeight);
-		  parent.stroke(0);
+//		  parent.stroke(0);
 		  for(int i=0;i<num;i++){
 		   parent.pushMatrix();
 		   parent.translate(parent.width/2,parent.height/2,0);
@@ -155,13 +151,43 @@ public class Ring {
 		    parent.popMatrix();
 		    
 		  }
+
+		if (isAutoMirror())
+		{
+			Ring mirror = this.mirror();
+			mirror.setAutoMirror(false);
+			mirror.draw(parent);
+		}
 	}
 	
 	public Ring mirror(){
 		Ring mirror = new Ring();
-		mirror.set(this.num, this.width, this.height, this.cDist, this.offset,this.strokeWeight, !flip1,!flip2);
+		mirror.set(this.num, this.getWidth(), this.getHeight(), this.cDist, this.offset,this.strokeWeight, !flip1,!flip2);
+		mirror.setStartPoint(startX, -startY);
+		mirror.setEndPoint(endX, -endY);
+		mirror.setStartCurvePoint(c1.x, -c1.y);
+		mirror.setEndCurvePoint(c2.x, -c2.y);
 		return mirror;
 	}
-	
+
+	public float getHeight()
+	{
+		return height;
+	}
+
+	public float getWidth()
+	{
+		return endX - startX;
+	}
+
+	public boolean isAutoMirror()
+	{
+		return autoMirror;
+	}
+
+	public void setAutoMirror(boolean autoMirror)
+	{
+		this.autoMirror = autoMirror;
+	}
 }
 
