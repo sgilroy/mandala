@@ -1,7 +1,7 @@
 package main;
 
 import processing.core.PApplet;
-import java.awt.event.KeyEvent;
+import processing.event.KeyEvent;
 
 public class Recorder {
 	private PApplet parent;
@@ -15,13 +15,18 @@ public class Recorder {
 		preWent = false;
 		parent.registerPre(this);
 		parent.registerPost(this);
-		parent.registerKeyEvent(this);
+		parent.registerMethod("keyEvent", this);
+//		parent.registerMethod("size", this);
+//    	Class<?> methodArgs[] = new Class[] { Integer.TYPE, Integer.TYPE };
+//		parent.registerWithArgs(sizeMethods, "size", o, methodArgs);
 	}
-	
+
+	public void size(int width, int height) {
+		this.width = width;
+	}
 	
 	public void pre(){
 	if(!record){	
-		parent.bezierDetail(20);
 		  parent.strokeWeight(1);
 		  parent.stroke(0,100,255);
 		  for(int i=0;i<4;i++){
@@ -57,7 +62,7 @@ public class Recorder {
 	public void keyEvent(KeyEvent event){
 		//parent.println(event.getKeyChar());
 		
-		if (event.getKeyChar() == 'r') {
+		if (event.getKey() == 'r') {
 		    record = true;
 		    
 		  //  parent.println("recorded");
